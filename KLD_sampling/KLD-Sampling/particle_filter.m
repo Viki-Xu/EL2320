@@ -1,4 +1,4 @@
-function [X, num] = particle_filter(v, M, M_min, nc, ns, R, Q, v_thresh, u_thresh, alpha, eps, delta, vis, KLD, gt, est_show)
+function [X, num, q_rc, prob] = particle_filter(v, M, M_min, nc, ns, R, Q, v_thresh, u_thresh, alpha, eps, delta, vis, KLD, gt, est_show)
 %PARTICLE_FILTER This function tracks objects on a video stream using the
 %particle filter
 
@@ -57,6 +57,9 @@ q_ms = q_r; % initialize mean state histogram
 i = 1; % current frame
 % while hasFrame(v)
 num(i) = M;
+z = 2;
+q_rc = zeros(6,48,1);
+q_rc(1,:,:) = q_r;
 
 while i < NF
     frame = readFrame(v);
@@ -64,8 +67,15 @@ while i < NF
     [d, ~, ~] = observation(q_r, S_bar, frame, nc); % observation
     S_bar = weight(S_bar, d, Q); % weighting
     [q_r, q_ms, E, dE] = model_update(q_r, frame, q_ms, S_bar, nc, u_thresh, alpha, est_show); % model update
+    prob(i) = 1/(sqrt(2*pi)*Q)*exp(-dE.^2/(2*Q^2));
+    if mod(i,60) == 0
+        q_rc(z,:,:)=q_r;
+        z = z+1;
+    end
     if KLD
         [S_bar, num_i] = KLD_sample(S_bar, eps, delta, v.Width, v.Height, M_min, ns); % KLD-sampling
+    else
+        num_i = length(S_bar(5,:));
     end
     S = systematic_resample(S_bar); % resampling
 

@@ -20,7 +20,7 @@ u_thresh = 0.12; % model update threshold
 alpha = 0.14; % means state contribution weight
 vis = 2; % specify level of visualization: 0=no plot, 1=image, 2=image+particles
 KLD = 1; % 1=KLD enabled, 0=KLD disabled
-est_show = 0; % 0 = mean state, 1 = best match
+est_show = 1; % 0 = mean state, 1 = best match
 eps = 0.3; % KLD parameter
 delta = 0.99; % KLD parameter (technically 1-delta) 
 
@@ -28,7 +28,7 @@ gt = load('blue_car_london.txt');
 gt = gt(:,3:6)';
 gt(1:2,:) = gt(1:2,:) + gt(3:4,:)/2; % move origin from top left to center
 
-[X, num] = particle_filter(v, M, M_min, nc, ns, R, Q, v_thresh, u_thresh, alpha, eps, delta, vis, KLD, gt, est_show);
+[X, num, q_rc, prob] = particle_filter(v, M, M_min, nc, ns, R, Q, v_thresh, u_thresh, alpha, eps, delta, vis, KLD, gt, est_show);
 
 % pose and window error
 e = gt - X(:,1:length(gt));
@@ -67,3 +67,34 @@ title(sprintf('error on height, mean error = %.2fm, mean absolute err = %.2fm', 
 
 figure('Name', 'Number of particles');
 plot(num)
+ylabel('Number of particles')
+
+figure('Name', 'Reference Histogram');
+subplot(2,3,1)
+bar(q_rc(1,:,:))
+title('Reference Histogram at Frame 1');
+
+subplot(2,3,2)
+bar(q_rc(2,:,:))
+title('Reference Histogram at Frame 60');
+
+subplot(2,3,3)
+bar(q_rc(3,:,:))
+title('Reference Histogram at Frame 120');
+
+subplot(2,3,4)
+bar(q_rc(4,:,:))
+title('Reference Histogram at Frame 180');
+
+subplot(2,3,5)
+bar(q_rc(5,:,:))
+title('Reference Histogram at Frame 240');
+
+subplot(2,3,6)
+bar(q_rc(6,:,:))
+title('Reference Histogram at Frame 300');
+
+figure('Name', 'Probability of Mean State');
+plot(prob)
+ylabel('Probability of Mean State')
+title(sprintf('Evolution of mean state probability when Model Update Threshold = %.2f', u_thresh));
