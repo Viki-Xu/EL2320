@@ -98,3 +98,4 @@ figure('Name', 'Probability of Mean State');
 plot(prob)
 ylabel('Probability of Mean State')
 title(sprintf('Evolution of mean state probability when Model Update Threshold = %.2f', u_thresh));
+%title('Evolution of mean state probability without Model Update');
