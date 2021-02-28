@@ -1,0 +1,12 @@
+X: states
+xhat: prediction
+P: variance of previous prediction
+G: gain of prediction error
+D: gain of measurement error
+Q: covariance matrix of measurement
+R: covariance matrix of prediction noise
+wStdP: scales the noise on simulated position
+wStdV: scales the noise on simulated velocity
+vStd: scales the simulated measurement noise on position
+u: acceleration
+PP: store the P into a column
