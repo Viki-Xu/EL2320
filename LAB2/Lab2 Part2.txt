@@ -1,0 +1,61 @@
+1. Advantage: (6) will have a lower computational expense.
+Drawback: (8) can react the disturbance if we move off the line, while (6) won't
+
+2. Using (9), we can model the circular motions whose linear and angular velocity are both constant. Limitation is that we can change these velocities.
+We need to fix v_0 and \omega_0 in advance.
+
+3. To normalize the distribution.
+
+4. Multinomial: M
+ Systematic: 1
+
+5. 
+w = 1/M + \epsilon:
+Multinomial: probability of surviving in 1 loop: p_s = 1/M + \epsilon
+                      probabilty of surviving in M loop: P = 1 - (1 - p_s)^M
+Systematic： 1
+
+0< w < 1/M:
+Multinomial: p_s = w;  P = 1 - (1 - p_s)^M
+Systematic：P = Mw; 
+
+That the weight decreases means that the probabilty of surviving will decrease.
+
+9. 
+10000：converge to the true position quickly, but the estimation error is bigger than measurement variance with 100, smaller than 0.0001
+
+10. need to redo
+[0.02 0.02 0.0001]: measurements: 1.3 +- 0.6, estimates: 1.4 +- 1.9. Estimation converges, but the error increases.
+[200 200 1]: measurements: 1.3 +- 0.6, estimates: 1.1 +- 0.6. Estimation converges, but the error increases.
+[2 2 0.01]: measurements: 1.3 +- 0.6, estimates: 0.6 +- 0.5
+
+11. need to redo
+For non-fixed motion, we generally need a larger noise than the fixed one to compensate for the uncertainty in the control input. 
+
+
+12.
+The higher dimensional motion will lead to a decreasing accuracy of estimation. We need more particles to achieve the same accuracy.
+We expect the estimation error to be generally larger when using linear\circular motion vs fixed.
+
+13.What do you think you can do to detect the outliers in
+third type of measurements? Hint: what happens to the likelihoods of the
+observation when it is far away from what the filter has predicted?
+We reject those observation far way the predicted position with high likelihoods.
+
+14.
+Fixed: absolute error analysis: measurements: 24.8 +- 12.8, estimates: 220.3 +- 136.
+Linear: absolute error analysis: measurements: 24.8 +- 12.8, estimates: 9.1 +- 5.1
+Circular: absolute error analysis: measurements: 24.8 +- 12.8, estimates: 8.6 +- 4.7
+
+try Q = 1 and 100, and R = 0.1=2/20 and 2
+
+Fixed: 
+Q = 1, R = 2: measurements: 24.8 +- 12.8, estimates: 241.6 +- 142.9
+Q = 100, R =2:  measurements: 24.8 +- 12.8, estimates: 253.8 +- 142.9
+Q = 100, R =200: measurements: 24.8 +- 12.8, estimates: 18.8 +- 9.8
+
+
+
+Main Problem:
+DataSet4; Global; 10000 Particles; Systematic:
+2 valid; Keep 2

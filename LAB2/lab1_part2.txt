@@ -1,0 +1,77 @@
+part 2.
+
+--- warm up ---
+
+Q_t is measurement noise
+R_t is model noise
+
+3. By increasing Q_t, we expect the gain K_t to be decreased, i.e. the system
+is less sensetive to errors. This will be visible on the graphs of the mean
+which will change slower over time. Since we have a lower gain K_t, we expect the 
+covariance P to be generally larger (see algorithm)
+
+If we instead decrease Q_t, the gain K_t will be 
+increased, and the system becomes more sensetive to noise, which is also visible on the
+graphs. Since we have a higher gain K_t, we expect the covariance P to be generally
+smaller.
+
+By increaseing R_t, we expect a higher covariance P, i.e. a higher uncertainty in
+the prediction step. This means we want the measurements to have a higher influence
+on the state estimate, i.e. we want a higher gain K_t. This means the system will
+be more sensetive to noise. 
+
+We expect the opposite for decreasing R_t
+
+When increasing both Q_t and R_t by the same amount, we expect the gain K_t to be 
+roughly unchanged since the effects of Q_t and R_t cancel out. Meanwhile, the 
+covariance P should generally increase since we are less certain about our 
+state estimate due to increased noise in the model and the measurements.
+
+When decreasing both Q_t and R_t by the same amount, we expect the gain K_t to be 
+roughly unchanged since the effects of Q_t and R_t cancel out. Meanwhile, the 
+covariance P should generally decrease since we are more certain about our 
+state estimate due to decreased noise in the model and the measurements.
+
+4. By decreasing P_init, the convergence will be slower in the beginning since 
+we believe we are less uncertain of our initial estimate. Increasing P_init
+has the opposite effect. Depending on how close the initial guess xhat is to the
+true value, the convergence will be slower or faster.
+
+The error of the (initial) estimate is only dependent on xhat
+
+-----------------
+ 5. for (3): bel(x_t)_bar is the prediction, bal(x_t) is the update
+for (2): bel(x_t)_bar is the expression in the integral, i.e. the prediction
+The term outside the integral in bel(x_t), i.e. the update
+
+6. if we (hypothetically) knew the state xt (i.e. the state x_t is complete)
+and were interested in predicting the measurement zt, no past measurement or control 
+would provide us additional information.
+
+7. The bound for delta are 0 and 1. [0 1]
+A larger delta means that we are more confident in the accuracy of our
+measurements, i.e. less data will be rejected as outliers. 
+In case of reliable measurements, we want to keep most data, i.e. a larger
+confidence interval is suitable, e.g. delta ~ 0.95 which corresponds to a
+lambda = 5.99
+In case of unreliable measurements, we want to discard more data as outliers, i.e.
+we want a smaller delta, e.g. delta = 0.5, which would correspond to a lambda = 1.39
+In general for both of the cases above the choices of delta/lambda are scenario
+scenario specific...
+
+8. The first (noisy) measurements would mean a larger value of nu, which would 
+mean error would have a larger effect on the intermediate means (see 3.2.7)
+
+9. We do not need to re-compute z^_{t,j}, H_{t,j}, S_{t,j} each time we enter the Landmarks loop
+
+10. sizes given in terms of segmented matrices
+algorithm 3: nu is size of j, H_j is size 2x3j.
+algorithm 4: nu is size jxn, H is size 2nx3j
+This is expected since the all observations i are associated simultaneously with landmark j
+in algorithm 4.
+
+- Simulation - 
+Dataset 1
+- noise models: uncertainties as standard deviations, i.e. to noise models
+should be gaussians with variances of standard deviations squared, 
+which sees to agree with the plot

@@ -1,0 +1,29 @@
+1. The particles are a set of random state samples (particles) drawn from
+the posterior. (4.3.1)
+
+2. importance weight: w_t = p(z_t | x_t) is the probability of the measurement
+z_t under the particle x_t.
+target distribution f: the distribution based on the measurements, corresponds to
+the target belief bel(x_t)
+proposal distribution g: distribution based on prediction/previous state x_t
+
+The relationship. We would like to obtain a sample from f, however cannot
+draw directly. However, we can approximate f by using the distribution from g, and
+attaching the weights to each sample x.
+
+3. Can occur when the number of particles is too small to cover relevant regions
+with high likelihood. Danger: incorrect estimation or unobtainable correct estimation
+
+4. By resampling, we get rid of particles that otherwise would end up in regions
+of low posterior probability. We therefore require less particles -> more efficient.
+
+5. e.g. the donut case
+
+6. (Correct?) Need to extend to continous density - different ways: 1) Gaussian approximation,
+2) k-means clustering (mixtures of Gaussians), 3) histogram bins, and more...*
+
+
+7. remedies: more particles and adding random particles. A high sample variance
+means our particle distribution is innacurate
+
+8. The pose uncertainty will decrease with an increase in particles

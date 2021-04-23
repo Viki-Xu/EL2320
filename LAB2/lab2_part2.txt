@@ -1,0 +1,116 @@
+1. Advantage: (6) will have a lower computational expense.
+Drawback: (8) can react the disturbance if we move off the line, while (6) won't
+
+2. Using (9), we can model the circular motions whose linear and angular velocity are both constant. Limitation is that we can change these velocities.
+We need to fix v_0 and \omega_0 in advance.
+
+3. To normalize the distribution.
+
+4. Multinomial: M
+ Systematic: 1
+
+5. 
+w = 1/M + \epsilon:
+Multinomial: probability of surviving in 1 loop: p_s = 1/M + \epsilon
+                      probabilty of surviving in M loop: P = 1 - (1 - p_s)^M
+Systematic： 1
+
+0< w < 1/M:
+Multinomial: p_s = w;  P = 1 - (1 - p_s)^M
+Systematic：P = Mw; 
+
+That the weight decreases means that the probabilty of surviving will decrease.
+
+6. 'params.Sigma_Q' is the measurement noise
+'params.Sigma_R' is the process noise
+
+-new answer-
+7. We no longer resample, since we model the process to have no noise, i.e. there is no need
+to rely on the measurements. The error will then entierly depend on the initial position.
+
+8. The distribution does not converge/ the distrubution stays uniform
+
+9. 
+10000：converge to the true position quickly, but the estimation error is bigger than measurement 
+variance with 100, smaller than 0.0001
+-new answer-
+10000: Our particles become more diffused (during update step?) as a result: the error generally 
+grows compared to 100.
+0.0001: For smaller Q, the convergence is slower. For too small values of Q, we are likely
+to not converge at all, due to lack of resampling. This is because the measurements are 
+categorized as outliers when we believe we are certain of our measurements. If we do converge,
+the algorithm is rather responding to the noise in the measurements.
+
+10. need to redo
+0.0001: converge to the true position quickly,  but the estimation error is smaller.
+10000: converge to the true position quickly,  but the estimation error is nearly the same.
+
+-new answer-
+10000: particles become more diffused during the prediction step. Convergence is good but the
+error grows.
+0.0001: particles become less diffused during prediction step - convergence is slower. The estimate
+becomes more 'concentrated'
+
+11. need to redo
+For non-fixed motion, we generally need a larger noise than the fixed one to compensate for the 
+uncertainty in the control input. 
+That is, if our motion model is a bad representation for the actual motion, we need to compensate
+for this by increasing process noise
+
+12.
+The higher dimensional motion will lead to a decreasing accuracy of estimation. We need more
+particles to achieve the same accuracy. We expect the estimation error to be generally larger 
+when using linear\circular motion vs fixed.
+
+13.What do you think you can do to detect the outliers in
+third type of measurements? Hint: what happens to the likelihoods of the
+observation when it is far away from what the filter has predicted?
+We reject those observation far way the predicted position with high likelihoods.
+
+14.
+Best result ~ e = 11.3 +- 5.5 using Q = 5*Q_0, R = 15*R_0
+Q~100, R~2 => does not converge (lags behind, eventually stops)
+Q~100, R~4 => converges (lags slightly)
+Q~1, R~2 => does not converge
+Q~1, R~0.1 => does not converge
+Q~100, R~0.1 => does not converge
+
+Linear: Best result ~ e = 7.8 +- 3.5 using Q = 5*Q_0, R = R_0
+Q~100, R~2 => e = 9.9+-4.7, converges
+Q~1, R~2 => does not converge
+Q~1, R~0.1 => does not converge
+Q~100, R~0.1 => does not converge
+
+Observations: Too low R, and the particles does not respond fast enough to the measurements.
+This can cause the particles to wander off, where all samples are rejected as outliers. 
+Too large R, and we react too fast to the noise in the measurements. Standard value is good
+
+Too large Q, and the particles become more diffused. Good for convergence, but the error tend to
+be larger. Too low Q, and the diffusion is too small, which can cause the particles to get 'ejected'
+depending on the predicted motion.
+
+Circular: Best result ~ e = 7.6 +- 3.2 using Q = 5*Q_0, R = R_0
+Q~100, R~2 => e = 8.9+-4.7, converges
+Q~1, R~2 => can diverge and converge, depends
+Q~1, R~0.1 => does not converge
+Q~100, R~0.1 => does not converge
+
+Observations: Changes in R, similar as linear case.
+
+Too large Q, similar as above, but the error is smaller (expected). Too small Q, and the diffuesion
+is too small. Particles have a higher chance to 'recover' in this case since they are able to
+predict the motion using the circular motion model.
+
+try Q = 1 and 100, and R = 0.1=2/20 and 2
+
+Conclusions: from Q11-Q13, we can expect the filter to be more sensetive to correct parameters
+if the motion model is "wrong" compared to the real case. In general, the fixed motion model will
+require the largest amount of diffusion in the prediction step (i.e. increase in R), followed
+by the linear motion model. Choice of Q is not as sensetive, but we will also need a generally
+increased Q for the fixed/linear case for a wider spread of particles in the measurements.
+Circular motion model is least sensetive; if the estimate temporarily diverges, the motion model
+should still give the best estimate compared to fixed/linear.
+
+15. Q and lambda
+
+16. the weight will become uniform among the particles
